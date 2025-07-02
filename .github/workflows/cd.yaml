@@ -19,11 +19,19 @@ jobs:
             - name: Build app
               run: scripts/buildprod.sh
 
-            - name: GCP Authenticate
-              uses: 'google-github-actions/setup-gcloud@v2'
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v2'
               with:
                 credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-                project_id: notely-464622
+
+            - name: 'Set up Cloud SDK'
+              uses: 'google-github-actions/setup-gcloud@v2'
+
+            - name: 'Use gcloud CLI'
+              run: 'gcloud info'
+
+            - name: Set GCP Project
+              run: gcloud config set project notely-464622
 
             - name: Build and push Docker image to Artifact Registry
               run: |
